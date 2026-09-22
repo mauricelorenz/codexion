@@ -6,13 +6,14 @@
 /*   By: mlorenz <mlorenz@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/19 21:25:36 by mlorenz           #+#    #+#             */
-/*   Updated: 2026/09/21 15:16:44 by mlorenz          ###   ########.fr       */
+/*   Updated: 2026/09/22 12:00:55 by mlorenz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CODEXION_H
 # define CODEXION_H
 
+# include <limits.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
