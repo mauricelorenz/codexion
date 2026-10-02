@@ -2,7 +2,8 @@ NAME =		codexion
 
 SRC_DIR =	coders/
 SRC =		main.c \
-			parser.c
+			parser.c \
+			time.c
 HDR =		$(SRC_DIR)codexion.h
 
 OBJ_DIR =	obj/

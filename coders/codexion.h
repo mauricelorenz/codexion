@@ -6,7 +6,7 @@
 /*   By: mlorenz <mlorenz@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/19 21:25:36 by mlorenz           #+#    #+#             */
-/*   Updated: 2026/10/02 12:54:18 by mlorenz          ###   ########.fr       */
+/*   Updated: 2026/10/02 13:00:35 by mlorenz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ struct s_simulation
 	t_coder		*coders;
 };
 
-int	parse_args(int argc, char **argv, t_args *args);
+int			parse_args(int argc, char **argv, t_args *args);
+long long	get_timestamp_ms(void);
 
 #endif
