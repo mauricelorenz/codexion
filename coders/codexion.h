@@ -6,7 +6,7 @@
 /*   By: mlorenz <mlorenz@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/19 21:25:36 by mlorenz           #+#    #+#             */
-/*   Updated: 2026/10/02 13:00:35 by mlorenz          ###   ########.fr       */
+/*   Updated: 2026/10/04 12:47:27 by mlorenz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,5 +57,7 @@ struct s_simulation
 
 int			parse_args(int argc, char **argv, t_args *args);
 long long	get_timestamp_ms(void);
+int			init_sim(t_simulation *sim);
+void		cleanup_sim(t_simulation *sim);
 
 #endif

@@ -1,29 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   sim.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mlorenz <mlorenz@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/09/19 21:25:30 by mlorenz           #+#    #+#             */
-/*   Updated: 2026/10/04 12:56:31 by mlorenz          ###   ########.fr       */
+/*   Created: 2026/10/04 11:49:50 by mlorenz           #+#    #+#             */
+/*   Updated: 2026/10/04 12:59:33 by mlorenz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
-int	main(int argc, char **argv)
+int	init_sim(t_simulation *sim)
 {
-	int				result;
-	t_simulation	sim;
+	int	i;
 
-	memset(&sim, 0, sizeof(sim));
-	result = parse_args(argc, argv, &sim.args);
-	if (result)
-		return (result);
-	result = init_sim(&sim);
-	if (result)
-		return (cleanup_sim(&sim), result);
-	cleanup_sim(&sim);
+	sim->start_time = get_timestamp_ms();
+	sim->coders = malloc(sim->args.number_of_coders * sizeof(t_coder));
+	if (!sim->coders)
+		return (3);
+	i = 0;
+	while (i < sim->args.number_of_coders)
+	{
+		sim->coders[i].id = i + 1;
+		sim->coders[i].sim = sim;
+		i++;
+	}
 	return (0);
+}
+
+void	cleanup_sim(t_simulation *sim)
+{
+	free(sim->coders);
+	sim->coders = NULL;
 }
