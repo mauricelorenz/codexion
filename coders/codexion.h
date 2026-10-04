@@ -6,7 +6,7 @@
 /*   By: mlorenz <mlorenz@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/19 21:25:36 by mlorenz           #+#    #+#             */
-/*   Updated: 2026/10/04 16:41:43 by mlorenz          ###   ########.fr       */
+/*   Updated: 2026/10/04 18:26:38 by mlorenz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,10 @@ typedef struct s_coder
 
 struct s_simulation
 {
-	t_args		args;
-	long long	start_time;
-	t_coder		*coders;
+	t_args			args;
+	long long		start_time;
+	t_coder			*coders;
+	pthread_mutex_t	log_mutex;
 };
 
 int			parse_args(int argc, char **argv, t_args *args);
@@ -60,5 +61,7 @@ long long	get_timestamp_ms(void);
 int			init_sim(t_simulation *sim);
 void		cleanup_sim(t_simulation *sim);
 int			run_sim(t_simulation *sim);
+long long	get_elapsed_ms(long long start_time);
+void		log_state(t_simulation *sim, int id, const char *message);
 
 #endif

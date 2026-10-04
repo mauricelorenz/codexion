@@ -6,7 +6,7 @@
 /*   By: mlorenz <mlorenz@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/04 11:49:50 by mlorenz           #+#    #+#             */
-/*   Updated: 2026/10/04 17:11:41 by mlorenz          ###   ########.fr       */
+/*   Updated: 2026/10/04 18:26:33 by mlorenz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ int	init_sim(t_simulation *sim)
 	int	i;
 
 	sim->start_time = get_timestamp_ms();
+	pthread_mutex_init(&sim->log_mutex, NULL);
 	sim->coders = malloc(sim->args.number_of_coders * sizeof(t_coder));
 	if (!sim->coders)
 		return (3);
@@ -61,12 +62,20 @@ static void	*run_coder(void *arg)
 	t_coder	*coder;
 
 	coder = (t_coder *)arg;
-	printf("Hello from coder %i\n", coder->id);
+	log_state(coder->sim, coder->id, "has started");
 	return (NULL);
+}
+
+void	log_state(t_simulation *sim, int id, const char *message)
+{
+	pthread_mutex_lock(&sim->log_mutex);
+	printf("%lli %i %s\n", get_elapsed_ms(sim->start_time), id, message);
+	pthread_mutex_unlock(&sim->log_mutex);
 }
 
 void	cleanup_sim(t_simulation *sim)
 {
 	free(sim->coders);
 	sim->coders = NULL;
+	pthread_mutex_destroy(&sim->log_mutex);
 }
