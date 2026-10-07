@@ -6,7 +6,7 @@
 /*   By: mlorenz <mlorenz@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/19 21:25:36 by mlorenz           #+#    #+#             */
-/*   Updated: 2026/10/07 11:26:58 by mlorenz          ###   ########.fr       */
+/*   Updated: 2026/10/07 21:12:55 by mlorenz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,5 +91,7 @@ void			log_state(t_simulation *sim, int id, const char *message);
 void			push_heap(t_heap *heap, t_heap_entry entry);
 t_heap_entry	peek_heap(t_heap *heap);
 t_heap_entry	pop_heap(t_heap *heap);
+void			take_dongle(t_dongle *dongle, int coder_id, long long deadline);
+void			release_dongle(t_dongle *dongle, int cooldown);
 
 #endif

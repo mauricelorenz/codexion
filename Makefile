@@ -6,7 +6,8 @@ SRC =		main.c \
 			time.c \
 			sim_init.c \
 			heap.c \
-			sim_run.c
+			sim_run.c \
+			dongle.c
 HDR =		$(SRC_DIR)codexion.h
 
 OBJ_DIR =	obj/
