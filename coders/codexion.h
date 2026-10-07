@@ -6,7 +6,7 @@
 /*   By: mlorenz <mlorenz@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/19 21:25:36 by mlorenz           #+#    #+#             */
-/*   Updated: 2026/10/07 11:13:56 by mlorenz          ###   ########.fr       */
+/*   Updated: 2026/10/07 11:26:58 by mlorenz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 # include <string.h>
 # include <sys/time.h>
 # include <unistd.h>
+
+typedef struct s_simulation	t_simulation;
 
 typedef enum e_scheduler
 {
@@ -39,22 +41,12 @@ typedef struct s_args
 	t_scheduler	scheduler;
 }	t_args;
 
-typedef struct s_simulation	t_simulation;
-
 typedef struct s_coder
 {
 	int				id;
 	pthread_t		thread;
 	t_simulation	*sim;
 }	t_coder;
-
-struct s_simulation
-{
-	t_args			args;
-	long long		start_time;
-	t_coder			*coders;
-	pthread_mutex_t	log_mutex;
-};
 
 typedef struct s_heap_entry
 {
@@ -70,6 +62,24 @@ typedef struct s_heap
 	int				seq_next;
 	t_scheduler		scheduler;
 }	t_heap;
+
+typedef struct s_dongle
+{
+	pthread_mutex_t	mutex;
+	pthread_cond_t	cond;
+	t_heap			heap;
+	int				taken;
+	long long		available_at;
+}	t_dongle;
+
+struct s_simulation
+{
+	t_args			args;
+	long long		start_time;
+	t_coder			*coders;
+	pthread_mutex_t	log_mutex;
+	t_dongle		*dongles;
+};
 
 int				parse_args(int argc, char **argv, t_args *args);
 long long		get_timestamp_ms(void);

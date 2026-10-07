@@ -1,37 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sim.c                                              :+:      :+:    :+:   */
+/*   sim_run.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mlorenz <mlorenz@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/10/04 11:49:50 by mlorenz           #+#    #+#             */
-/*   Updated: 2026/10/04 18:26:33 by mlorenz          ###   ########.fr       */
+/*   Created: 2026/10/07 12:31:18 by mlorenz           #+#    #+#             */
+/*   Updated: 2026/10/07 12:33:29 by mlorenz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
 static void	*run_coder(void *arg);
-
-int	init_sim(t_simulation *sim)
-{
-	int	i;
-
-	sim->start_time = get_timestamp_ms();
-	pthread_mutex_init(&sim->log_mutex, NULL);
-	sim->coders = malloc(sim->args.number_of_coders * sizeof(t_coder));
-	if (!sim->coders)
-		return (3);
-	i = 0;
-	while (i < sim->args.number_of_coders)
-	{
-		sim->coders[i].id = i + 1;
-		sim->coders[i].sim = sim;
-		i++;
-	}
-	return (0);
-}
 
 int	run_sim(t_simulation *sim)
 {
@@ -71,11 +52,4 @@ void	log_state(t_simulation *sim, int id, const char *message)
 	pthread_mutex_lock(&sim->log_mutex);
 	printf("%lli %i %s\n", get_elapsed_ms(sim->start_time), id, message);
 	pthread_mutex_unlock(&sim->log_mutex);
-}
-
-void	cleanup_sim(t_simulation *sim)
-{
-	free(sim->coders);
-	sim->coders = NULL;
-	pthread_mutex_destroy(&sim->log_mutex);
 }

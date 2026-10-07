@@ -4,8 +4,9 @@ SRC_DIR =	coders/
 SRC =		main.c \
 			parser.c \
 			time.c \
-			sim.c \
-			heap.c
+			sim_init.c \
+			heap.c \
+			sim_run.c
 HDR =		$(SRC_DIR)codexion.h
 
 OBJ_DIR =	obj/
