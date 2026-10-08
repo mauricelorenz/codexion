@@ -6,7 +6,7 @@
 /*   By: mlorenz <mlorenz@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/04 11:49:50 by mlorenz           #+#    #+#             */
-/*   Updated: 2026/10/07 12:34:52 by mlorenz          ###   ########.fr       */
+/*   Updated: 2026/10/08 15:36:15 by mlorenz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,10 @@ int	init_sim(t_simulation *sim)
 	int	result;
 
 	sim->start_time = get_timestamp_ms();
+	sim->stop = 0;
+	if (pthread_cond_init(&sim->state_cond, NULL))
+		return (4);
+	pthread_mutex_init(&sim->state_mutex, NULL);
 	pthread_mutex_init(&sim->log_mutex, NULL);
 	sim->coders = malloc(sim->args.number_of_coders * sizeof(t_coder));
 	if (!sim->coders)
@@ -28,6 +32,8 @@ int	init_sim(t_simulation *sim)
 	i = 0;
 	while (i < sim->args.number_of_coders)
 	{
+		sim->coders[i].last_compile_start = sim->start_time;
+		sim->coders[i].compiles_done = 0;
 		sim->coders[i].id = i + 1;
 		sim->coders[i].sim = sim;
 		i++;
@@ -95,5 +101,7 @@ void	cleanup_sim(t_simulation *sim)
 	sim->dongles = NULL;
 	free(sim->coders);
 	sim->coders = NULL;
+	pthread_cond_destroy(&sim->state_cond);
+	pthread_mutex_destroy(&sim->state_mutex);
 	pthread_mutex_destroy(&sim->log_mutex);
 }

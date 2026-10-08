@@ -6,7 +6,7 @@
 /*   By: mlorenz <mlorenz@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/07 16:45:02 by mlorenz           #+#    #+#             */
-/*   Updated: 2026/10/07 21:27:15 by mlorenz          ###   ########.fr       */
+/*   Updated: 2026/10/08 15:46:23 by mlorenz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,21 @@
 static int	can_take(t_dongle *dongle, int coder_id);
 static int	is_head(t_dongle *dongle, int coder_id);
 
-void	take_dongle(t_dongle *dongle, int coder_id, long long deadline)
+int	take_dongle(t_dongle *dongle, t_coder *coder)
 {
 	t_heap_entry	entry;
 	struct timespec	ts;
 
-	entry.coder_id = coder_id;
-	entry.deadline = deadline;
+	entry.coder_id = coder->id;
+	entry.deadline = coder->last_compile_start
+		+ coder->sim->args.time_to_burnout;
 	pthread_mutex_lock(&dongle->mutex);
 	push_heap(&dongle->heap, entry);
-	while (!can_take(dongle, coder_id))
+	while (!can_take(dongle, coder->id))
 	{
 		ts.tv_sec = dongle->available_at / 1000;
 		ts.tv_nsec = dongle->available_at % 1000 * 1000000;
-		if (is_head(dongle, coder_id) && !dongle->taken)
+		if (is_head(dongle, coder->id) && !dongle->taken)
 			pthread_cond_timedwait(&dongle->cond, &dongle->mutex, &ts);
 		else
 			pthread_cond_wait(&dongle->cond, &dongle->mutex);
@@ -36,6 +37,7 @@ void	take_dongle(t_dongle *dongle, int coder_id, long long deadline)
 	dongle->taken = 1;
 	pop_heap(&dongle->heap);
 	pthread_mutex_unlock(&dongle->mutex);
+	return (0);
 }
 
 static int	can_take(t_dongle *dongle, int coder_id)
@@ -51,11 +53,12 @@ static int	is_head(t_dongle *dongle, int coder_id)
 		&& peek_heap(&dongle->heap).coder_id == coder_id);
 }
 
-void	release_dongle(t_dongle *dongle, int cooldown)
+void	release_dongle(t_dongle *dongle, t_coder *coder)
 {
 	pthread_mutex_lock(&dongle->mutex);
 	dongle->taken = 0;
-	dongle->available_at = get_timestamp_ms() + cooldown;
+	dongle->available_at = get_timestamp_ms()
+		+ coder->sim->args.dongle_cooldown;
 	pthread_cond_broadcast(&dongle->cond);
 	pthread_mutex_unlock(&dongle->mutex);
 }

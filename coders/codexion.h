@@ -6,7 +6,7 @@
 /*   By: mlorenz <mlorenz@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/19 21:25:36 by mlorenz           #+#    #+#             */
-/*   Updated: 2026/10/07 21:12:55 by mlorenz          ###   ########.fr       */
+/*   Updated: 2026/10/08 15:45:39 by mlorenz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ typedef struct s_coder
 	int				id;
 	pthread_t		thread;
 	t_simulation	*sim;
+	long long		last_compile_start;
+	int				compiles_done;
 }	t_coder;
 
 typedef struct s_heap_entry
@@ -79,6 +81,9 @@ struct s_simulation
 	t_coder			*coders;
 	pthread_mutex_t	log_mutex;
 	t_dongle		*dongles;
+	pthread_mutex_t	state_mutex;
+	pthread_cond_t	state_cond;
+	int				stop;
 };
 
 int				parse_args(int argc, char **argv, t_args *args);
@@ -91,7 +96,7 @@ void			log_state(t_simulation *sim, int id, const char *message);
 void			push_heap(t_heap *heap, t_heap_entry entry);
 t_heap_entry	peek_heap(t_heap *heap);
 t_heap_entry	pop_heap(t_heap *heap);
-void			take_dongle(t_dongle *dongle, int coder_id, long long deadline);
-void			release_dongle(t_dongle *dongle, int cooldown);
+int				take_dongle(t_dongle *dongle, t_coder *coder);
+void			release_dongle(t_dongle *dongle, t_coder *coder);
 
 #endif
