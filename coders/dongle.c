@@ -6,7 +6,7 @@
 /*   By: mlorenz <mlorenz@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/07 16:45:02 by mlorenz           #+#    #+#             */
-/*   Updated: 2026/10/08 15:46:23 by mlorenz          ###   ########.fr       */
+/*   Updated: 2026/10/08 17:26:03 by mlorenz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,7 @@ int	take_dongle(t_dongle *dongle, t_coder *coder)
 	push_heap(&dongle->heap, entry);
 	while (!can_take(dongle, coder->id))
 	{
-		ts.tv_sec = dongle->available_at / 1000;
-		ts.tv_nsec = dongle->available_at % 1000 * 1000000;
+		ts = get_ts(dongle->available_at);
 		if (is_head(dongle, coder->id) && !dongle->taken)
 			pthread_cond_timedwait(&dongle->cond, &dongle->mutex, &ts);
 		else
