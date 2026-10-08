@@ -6,13 +6,11 @@
 /*   By: mlorenz <mlorenz@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/07 12:31:18 by mlorenz           #+#    #+#             */
-/*   Updated: 2026/10/07 12:33:29 by mlorenz          ###   ########.fr       */
+/*   Updated: 2026/10/08 18:48:40 by mlorenz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
-
-static void	*run_coder(void *arg);
 
 int	run_sim(t_simulation *sim)
 {
@@ -36,15 +34,6 @@ int	run_sim(t_simulation *sim)
 	if (i != sim->args.number_of_coders)
 		return (4);
 	return (0);
-}
-
-static void	*run_coder(void *arg)
-{
-	t_coder	*coder;
-
-	coder = (t_coder *)arg;
-	log_state(coder->sim, coder->id, "has started");
-	return (NULL);
 }
 
 void	log_state(t_simulation *sim, int id, const char *message)

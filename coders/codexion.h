@@ -6,7 +6,7 @@
 /*   By: mlorenz <mlorenz@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/19 21:25:36 by mlorenz           #+#    #+#             */
-/*   Updated: 2026/10/08 17:16:39 by mlorenz          ###   ########.fr       */
+/*   Updated: 2026/10/08 18:48:59 by mlorenz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,5 +99,6 @@ t_heap_entry	pop_heap(t_heap *heap);
 int				take_dongle(t_dongle *dongle, t_coder *coder);
 void			release_dongle(t_dongle *dongle, t_coder *coder);
 struct timespec	get_ts(long long timestamp);
+void			*run_coder(void *arg);
 
 #endif
