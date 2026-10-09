@@ -6,7 +6,7 @@
 /*   By: mlorenz <mlorenz@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/07 12:31:18 by mlorenz           #+#    #+#             */
-/*   Updated: 2026/10/09 17:01:43 by mlorenz          ###   ########.fr       */
+/*   Updated: 2026/10/09 21:24:25 by mlorenz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,13 @@ static int	check_coders(t_simulation *sim, long long *earliest_deadline)
 void	log_state(t_simulation *sim, int id, const char *message)
 {
 	pthread_mutex_lock(&sim->log_mutex);
+	if (sim->log_stopped && strcmp(message, "burned out"))
+	{
+		pthread_mutex_unlock(&sim->log_mutex);
+		return ;
+	}
 	printf("%lli %i %s\n", get_elapsed_ms(sim->start_time), id, message);
+	if (!strcmp(message, "burned out"))
+		sim->log_stopped = 1;
 	pthread_mutex_unlock(&sim->log_mutex);
 }

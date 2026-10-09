@@ -6,7 +6,7 @@
 /*   By: mlorenz <mlorenz@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/07 16:45:02 by mlorenz           #+#    #+#             */
-/*   Updated: 2026/10/09 14:41:22 by mlorenz          ###   ########.fr       */
+/*   Updated: 2026/10/09 21:14:44 by mlorenz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,12 @@ int	take_dongle(t_dongle *dongle, t_coder *coder)
 		+ coder->sim->args.time_to_burnout;
 	pthread_mutex_lock(&dongle->mutex);
 	push_heap(&dongle->heap, entry);
-	while (!can_take(dongle, coder->id))
+	while (1)
 	{
 		if (sim_stopped(coder->sim))
 			return (pthread_mutex_unlock(&dongle->mutex), 1);
+		if (can_take(dongle, coder->id))
+			break ;
 		ts = get_ts(dongle->available_at);
 		if (is_head(dongle, coder->id) && !dongle->taken)
 			pthread_cond_timedwait(&dongle->cond, &dongle->mutex, &ts);

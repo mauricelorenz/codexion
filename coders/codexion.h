@@ -6,7 +6,7 @@
 /*   By: mlorenz <mlorenz@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/19 21:25:36 by mlorenz           #+#    #+#             */
-/*   Updated: 2026/10/09 16:18:28 by mlorenz          ###   ########.fr       */
+/*   Updated: 2026/10/09 21:20:12 by mlorenz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ struct s_simulation
 	pthread_cond_t	state_cond;
 	int				stop;
 	pthread_t		monitor;
+	int				log_stopped;
 };
 
 int				parse_args(int argc, char **argv, t_args *args);
