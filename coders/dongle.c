@@ -6,12 +6,13 @@
 /*   By: mlorenz <mlorenz@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/07 16:45:02 by mlorenz           #+#    #+#             */
-/*   Updated: 2026/10/08 17:26:03 by mlorenz          ###   ########.fr       */
+/*   Updated: 2026/10/09 14:41:22 by mlorenz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
+static int	sim_stopped(t_simulation *sim);
 static int	can_take(t_dongle *dongle, int coder_id);
 static int	is_head(t_dongle *dongle, int coder_id);
 
@@ -27,6 +28,8 @@ int	take_dongle(t_dongle *dongle, t_coder *coder)
 	push_heap(&dongle->heap, entry);
 	while (!can_take(dongle, coder->id))
 	{
+		if (sim_stopped(coder->sim))
+			return (pthread_mutex_unlock(&dongle->mutex), 1);
 		ts = get_ts(dongle->available_at);
 		if (is_head(dongle, coder->id) && !dongle->taken)
 			pthread_cond_timedwait(&dongle->cond, &dongle->mutex, &ts);
@@ -37,6 +40,16 @@ int	take_dongle(t_dongle *dongle, t_coder *coder)
 	pop_heap(&dongle->heap);
 	pthread_mutex_unlock(&dongle->mutex);
 	return (0);
+}
+
+static int	sim_stopped(t_simulation *sim)
+{
+	int	stopped;
+
+	pthread_mutex_lock(&sim->state_mutex);
+	stopped = sim->stop;
+	pthread_mutex_unlock(&sim->state_mutex);
+	return (stopped);
 }
 
 static int	can_take(t_dongle *dongle, int coder_id)

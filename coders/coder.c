@@ -6,7 +6,7 @@
 /*   By: mlorenz <mlorenz@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/08 18:47:55 by mlorenz           #+#    #+#             */
-/*   Updated: 2026/10/08 19:24:40 by mlorenz          ###   ########.fr       */
+/*   Updated: 2026/10/09 15:05:52 by mlorenz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ void	*run_coder(void *arg)
 	coder = (t_coder *)arg;
 	while (1)
 	{
-		if (run_compile(coder))
+		if (run_compile(coder) || coder->compiles_done
+			>= coder->sim->args.number_of_compiles_required)
 			break ;
 		log_state(coder->sim, coder->id, "is debugging");
 		if (sleep_coder(coder, coder->sim->args.time_to_debug))
