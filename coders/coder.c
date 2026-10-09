@@ -6,7 +6,7 @@
 /*   By: mlorenz <mlorenz@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/08 18:47:55 by mlorenz           #+#    #+#             */
-/*   Updated: 2026/10/09 15:05:52 by mlorenz          ###   ########.fr       */
+/*   Updated: 2026/10/09 18:19:03 by mlorenz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	*run_coder(void *arg)
 	t_coder			*coder;
 
 	coder = (t_coder *)arg;
-	while (1)
+	while (coder->compiles_done < coder->sim->args.number_of_compiles_required)
 	{
 		if (run_compile(coder) || coder->compiles_done
 			>= coder->sim->args.number_of_compiles_required)
