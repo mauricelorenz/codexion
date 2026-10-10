@@ -1,14 +1,14 @@
 NAME =		codexion
 
 SRC_DIR =	coders/
-SRC =		main.c \
-			parser.c \
-			time.c \
-			sim_init.c \
-			heap.c \
-			sim_run.c \
+SRC =		coder.c \
 			dongle.c \
-			coder.c
+			heap.c \
+			main.c \
+			parser.c \
+			sim_init.c \
+			sim_run.c \
+			time.c
 HDR =		$(SRC_DIR)codexion.h
 
 OBJ_DIR =	obj/

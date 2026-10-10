@@ -6,7 +6,7 @@
 /*   By: mlorenz <mlorenz@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/19 21:25:36 by mlorenz           #+#    #+#             */
-/*   Updated: 2026/10/09 21:20:12 by mlorenz          ###   ########.fr       */
+/*   Updated: 2026/10/10 12:31:46 by mlorenz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 # include <stdlib.h>
 # include <string.h>
 # include <sys/time.h>
-# include <unistd.h>
 
 typedef struct s_simulation	t_simulation;
 
@@ -88,19 +87,25 @@ struct s_simulation
 	int				log_stopped;
 };
 
-int				parse_args(int argc, char **argv, t_args *args);
-long long		get_timestamp_ms(void);
-int				init_sim(t_simulation *sim);
-void			cleanup_sim(t_simulation *sim);
-int				run_sim(t_simulation *sim);
-long long		get_elapsed_ms(long long start_time);
-void			log_state(t_simulation *sim, int id, const char *message);
+void			*run_coder(void *arg);
+
+int				take_dongle(t_dongle *dongle, t_coder *coder);
+void			release_dongle(t_dongle *dongle, t_coder *coder);
+
 void			push_heap(t_heap *heap, t_heap_entry entry);
 t_heap_entry	peek_heap(t_heap *heap);
 t_heap_entry	pop_heap(t_heap *heap);
-int				take_dongle(t_dongle *dongle, t_coder *coder);
-void			release_dongle(t_dongle *dongle, t_coder *coder);
+
+int				parse_args(int argc, char **argv, t_args *args);
+
+int				init_sim(t_simulation *sim);
+void			cleanup_sim(t_simulation *sim);
+
+int				run_sim(t_simulation *sim);
+void			log_state(t_simulation *sim, int id, const char *message);
+
+long long		get_timestamp_ms(void);
+long long		get_elapsed_ms(long long start_time);
 struct timespec	get_ts(long long timestamp);
-void			*run_coder(void *arg);
 
 #endif
