@@ -6,7 +6,7 @@
 /*   By: mlorenz <mlorenz@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/07 12:31:18 by mlorenz           #+#    #+#             */
-/*   Updated: 2026/10/09 21:24:25 by mlorenz          ###   ########.fr       */
+/*   Updated: 2026/10/10 11:13:07 by mlorenz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,11 +78,14 @@ static int	check_coders(t_simulation *sim, long long *earliest_deadline)
 	long long		now;
 	long long		coder_deadline;
 
-	i = 0;
+	i = -1;
 	now = get_timestamp_ms();
 	*earliest_deadline = LLONG_MAX;
-	while (i < sim->args.number_of_coders)
+	while (++i < sim->args.number_of_coders)
 	{
+		if (sim->coders[i].compiles_done
+			>= sim->args.number_of_compiles_required)
+			continue ;
 		coder_deadline = sim->coders[i].last_compile_start
 			+ sim->args.time_to_burnout;
 		if (now >= coder_deadline)
@@ -93,9 +96,8 @@ static int	check_coders(t_simulation *sim, long long *earliest_deadline)
 		}
 		if (coder_deadline < *earliest_deadline)
 			*earliest_deadline = coder_deadline;
-		i++;
 	}
-	return (0);
+	return (*earliest_deadline == LLONG_MAX);
 }
 
 void	log_state(t_simulation *sim, int id, const char *message)
